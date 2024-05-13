@@ -1,0 +1,5 @@
+# python cache 
+__pycache__/
+
+# others
+.DS_Store

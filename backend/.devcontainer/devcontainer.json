@@ -1,0 +1,16 @@
+{
+    "name": "Backend",
+    "dockerComposeFile": "./compose.yaml",
+    "service": "backend",
+    "workspaceFolder": "/workspace/backend",
+    "forwardPorts":[
+      8000,
+    ],
+    "settings": {
+      "terminal.integrated.shell.linux": "/bin/bash"
+    },
+    "extensions": [
+        "dbaeumer.vscode-eslint",
+        "ms-python.python",
+    ]
+}
