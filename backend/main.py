@@ -36,7 +36,7 @@ async def get_problem(problem_id: int)->Problem:
         return problems[problem_id]
     
 @app.post("/answer-problem")
-async def answer_validate(problem_id:int, answer: str, user: User)->AnswerProblemRes:
+async def answer_problem(problem_id:int, answer: str, user: User)->AnswerProblemRes:
     if not user.is_valid():
         return HTTPException(status_code=401, detail="Unauthorized: invalid user")
     if problem_id not in problems.keys():
