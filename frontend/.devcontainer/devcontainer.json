@@ -1,6 +1,6 @@
 {
   "name": "Frontend",
-  "dockerComposeFile": "./docker-compose.yaml",
+  "dockerComposeFile": "./docker-compose.yml",
   "service": "frontend",
   "workspaceFolder": "/app",
   "forwardPorts": [3000],
