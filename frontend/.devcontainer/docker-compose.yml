@@ -3,9 +3,9 @@ version: "3.8"
 services:
   frontend:
     build:
-      context: ./
-      dockerfile: ./Dockerfile
+      context: ..
+      dockerfile: ./.devcontainer/Dockerfile
     volumes:
-      - ./frontend:/app
+      - ../:/app
     ports:
       - "3000:3000"

@@ -1,7 +1,7 @@
 {
   "name": "Frontend",
   "dockerComposeFile": "./docker-compose.yaml",
-  "service": "backend",
+  "service": "frontend",
   "workspaceFolder": "/app",
   "forwardPorts": [3000],
   "customizations": {
