@@ -5,6 +5,7 @@ import {
   CardContent,
   CardHeader,
 } from "@mui/material";
+import { useRouter } from "next/navigation";
 
 type Props = {
   width: number;
@@ -13,6 +14,7 @@ type Props = {
 };
 
 export const QuizCard = ({ width, title, description }: Props) => {
+  const router = useRouter();
   return (
     <div className="w-full">
       <Card variant="outlined" sx={{ width: `100%`, padding: "0px" }}>
@@ -25,7 +27,13 @@ export const QuizCard = ({ width, title, description }: Props) => {
           {description}
         </CardContent>
         <CardActions sx={{ justifyContent: "right", paddingRight: "10px" }}>
-          <Button size="small" color="primary">
+          <Button
+            size="small"
+            color="primary"
+            onClick={() => {
+              router.push("/work/1");
+            }}
+          >
             選択する
           </Button>
         </CardActions>

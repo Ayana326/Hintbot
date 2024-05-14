@@ -26,7 +26,7 @@ export default function SignUp() {
   };
   return (
     <>
-      <Container className="min-h-screen">
+      <Container>
         <div className="px-6 flex justify-center">
           <div className="flex flex-col items-center w-1/2 min-w-80 mt-16 ring-1 ring-gray-300 py-10 px-16 rounded-md shadow-lg">
             <h1 className="text-3xl font-bold text-gray-900">新規登録</h1>
@@ -38,7 +38,7 @@ export default function SignUp() {
                 handleSubmit(e);
               }}
             >
-              <div className="mt-12">
+              <div className="mt-6">
                 <label className="font-bold">
                   名前<span className="text-xs align-top text-red-500">*</span>
                 </label>

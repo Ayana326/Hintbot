@@ -24,7 +24,7 @@ export default function SignIn() {
 
   return (
     <>
-      <Container className="min-h-screen">
+      <Container>
         <div className="px-6 flex justify-center">
           <div className="flex flex-col items-center w-1/2 min-w-80 mt-16 ring-1 ring-gray-300 py-10 px-16 rounded-md shadow-lg">
             <h1 className="text-3xl font-bold leading-9 tracking-tight text-gray-900">
