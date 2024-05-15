@@ -1,7 +1,7 @@
 name: frontend Pipeline
 
 on:
-  pull_request:
+  push:
     branches:
       - "**/front-**"
 
