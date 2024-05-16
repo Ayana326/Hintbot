@@ -12,6 +12,7 @@
     "@emotion/cache": "^11.11.0",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
+    "@monaco-editor/react": "^4.6.0",
     "@mui/icons-material": "^5.15.17",
     "@mui/material": "^5.15.17",
     "@mui/material-nextjs": "^5.15.11",
@@ -22,6 +23,7 @@
     "node-gyp": "^10.1.0",
     "react": "^18",
     "react-dom": "^18",
+    "react-monaco-editor": "^0.55.0",
     "styled-components": "^6.1.11"
   },
   "devDependencies": {
