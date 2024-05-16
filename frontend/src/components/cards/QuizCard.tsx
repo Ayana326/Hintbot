@@ -8,12 +8,13 @@ import {
 import { useRouter } from "next/navigation";
 
 type Props = {
+  id: string;
   width: number;
   title: string;
   description: string;
 };
 
-export const QuizCard = ({ width, title, description }: Props) => {
+export const QuizCard = ({ id, width, title, description }: Props) => {
   const router = useRouter();
   return (
     <div className="w-full">
@@ -31,7 +32,7 @@ export const QuizCard = ({ width, title, description }: Props) => {
             size="small"
             color="primary"
             onClick={() => {
-              router.push("/work/1");
+              router.push(`/work/${id}`);
             }}
           >
             選択する
