@@ -18,10 +18,7 @@ export default function QuizPage() {
           </div>
         </Grid>
         <Grid item xs={12} sm={12} md={5} lg={5} xl={5}>
-          <ChatBot
-            messages={[{ "1": "メッセージ" }]}
-            responses={[{ "1": "レスポンス" }]}
-          />
+          <ChatBot />
         </Grid>
       </Grid>
     </div>

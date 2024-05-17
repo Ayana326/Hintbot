@@ -1,43 +1,38 @@
-import { ArrowCircleRight } from "@mui/icons-material";
-import { IconButton, InputAdornment, TextField, styled } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
+import { MessageBox } from "./MessageBox";
+import { MessageBubble } from "./MessageBubble";
 
-type Props = {
-  messages: { [key: string]: string }[];
-  responses: { [key: string]: string }[];
-};
+export const ChatBot = () => {
+  const [messages, setMessages] = useState<MessageType[]>([]);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
-const CssTextField = styled(TextField)({
-  ".mui-1q37jh5-MuiInputBase-root-MuiOutlinedInput-root": {
-    padding: "10px 5px",
-  },
-  "& .MuiInput-underline:after": {
-    borderBottomColor: "#B2BAC2",
-  },
-  "& .MuiOutlinedInput-root": {
-    "&.Mui-focused fieldset": {
-      borderColor: "black",
-    },
-  },
-});
+  useEffect(() => {
+    // コンテナがレンダリングされるたびにスクロール位置を更新
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [messages]);
 
-export const ChatBot = ({ messages, responses }: Props) => {
   return (
-    <div className="w-full border">
-      <div className="body bg-slate-200 h-120">d</div>
-      <div className="text-sending">
-        <CssTextField
-          sx={{ width: "100%" }}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="start">
-                <IconButton color="secondary">
-                  <ArrowCircleRight />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-          multiline
-        />
+    <div className="w-full">
+      <div className="border rounded-md relative" style={{ height: "80vh" }}>
+        <div
+          ref={scrollRef}
+          className="body p-6 overflow-scroll"
+          style={{ height: "calc(80vh - 64px)" }}
+        >
+          {messages.map((message: MessageType, index: number) => {
+            return (
+              <div key={index}>
+                <MessageBubble message={message.user} position="right" />
+                <MessageBubble message={message.ai} position="left" />
+              </div>
+            );
+          })}
+        </div>
+        <div className="text-sending absolute bottom-1 right-0 left-0 m-auto w-11/12">
+          <MessageBox messages={messages} setMessages={setMessages} />
+        </div>
       </div>
     </div>
   );
