@@ -1,5 +1,6 @@
 "use client";
 
+import { signup } from "@/firebase/auth";
 import EmailIcon from "@mui/icons-material/Email";
 import LockIcon from "@mui/icons-material/Lock";
 import { Container } from "@mui/material";
@@ -16,13 +17,17 @@ export default function SignUp() {
   const [error, setError] = useState(false);
   const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       setError(true);
       return;
     }
-    router.push("/");
+
+    const UserCredential = await signup(email, password);
+    if (UserCredential.user) {
+      router.push("/work");
+    }
   };
   return (
     <>
@@ -48,7 +53,7 @@ export default function SignUp() {
                   type="text"
                   className="block h-10 w-full pl-2 pr-2 rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset text-md "
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    setEmail(e.target.value);
+                    setName(e.target.value);
                   }}
                 />
               </div>
@@ -159,7 +164,7 @@ export default function SignUp() {
                 <input
                   required
                   data-error={error}
-                  id="password"
+                  id="confirm-password"
                   type="password"
                   className="block h-10 w-full pl-10 pr-2 rounded-md border-0 py-1.5 data-[error=true]:ring-red-500 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-md"
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
