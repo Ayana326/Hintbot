@@ -27,7 +27,7 @@ export const ProjectHeader = () => {
             <ListItemButton
               sx={{ height: "100%" }}
               onClick={() => {
-                router.push("/work");
+                router.push("/");
               }}
             >
               <span className="mx-auto text-sm">Top</span>
