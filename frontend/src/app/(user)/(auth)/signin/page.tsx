@@ -1,4 +1,5 @@
 "use client";
+import { useAuthContext } from "@/context/AuthContext";
 import { signin } from "@/firebase/auth";
 import EmailIcon from "@mui/icons-material/Email";
 import LockIcon from "@mui/icons-material/Lock";
@@ -11,18 +12,25 @@ export default function SignIn() {
   const [email, setEmail] = useState("");
   const [error, setError] = useState(false);
   const router = useRouter();
+  const { currentUser, setCurrentUser } = useAuthContext();
 
   useEffect(() => {
-    if (error) {
-      router.push("/");
+    if (currentUser) {
+      router.push("/work");
     }
-  }, [error, router]);
+  }, [currentUser, router]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const UserCredential = await signin(email, password);
-    if (UserCredential.user) {
-      router.push("/work");
+    try {
+      const UserCredential = await signin(email, password);
+      if (UserCredential.user) {
+        document.cookie = await UserCredential.user.getIdToken(true);
+      }
+      setCurrentUser(UserCredential.user);
+    } catch (error) {
+      setError(true);
+      alert("メールアドレスまたはパスワードが間違っています");
     }
   };
 

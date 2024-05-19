@@ -1,11 +1,12 @@
 "use client";
 
+import { useAuthContext } from "@/context/AuthContext";
 import { signup } from "@/firebase/auth";
 import EmailIcon from "@mui/icons-material/Email";
 import LockIcon from "@mui/icons-material/Lock";
 import { Container } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function SignUp() {
   const [sex, setSex] = useState<"man" | "woman">();
@@ -16,6 +17,13 @@ export default function SignUp() {
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [error, setError] = useState(false);
   const router = useRouter();
+  const { currentUser, setCurrentUser } = useAuthContext();
+
+  useEffect(() => {
+    if (currentUser) {
+      router.push("/work");
+    }
+  }, [currentUser, router]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -23,10 +31,14 @@ export default function SignUp() {
       setError(true);
       return;
     }
-
-    const UserCredential = await signup(email, password);
-    if (UserCredential.user) {
-      router.push("/work");
+    try {
+      const UserCredential = await signup(email, password);
+      if (UserCredential.user) {
+        document.cookie = await UserCredential.user.getIdToken(true);
+      }
+      setCurrentUser(UserCredential.user);
+    } catch (error) {
+      alert("既にユーザーが存在しています");
     }
   };
   return (
