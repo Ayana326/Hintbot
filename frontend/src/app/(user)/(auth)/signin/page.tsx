@@ -1,6 +1,4 @@
 "use client";
-import { useAuthContext } from "@/context/AuthContext";
-import { signin } from "@/firebase/auth";
 import EmailIcon from "@mui/icons-material/Email";
 import LockIcon from "@mui/icons-material/Lock";
 import { Container } from "@mui/material";
@@ -12,26 +10,16 @@ export default function SignIn() {
   const [email, setEmail] = useState("");
   const [error, setError] = useState(false);
   const router = useRouter();
-  const { currentUser, setCurrentUser } = useAuthContext();
 
   useEffect(() => {
-    if (currentUser) {
-      router.push("/work");
+    if (error) {
+      router.push("/");
     }
-  }, [currentUser, router]);
+  }, [error, router]);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      const UserCredential = await signin(email, password);
-      if (UserCredential.user) {
-        document.cookie = await UserCredential.user.getIdToken(true);
-      }
-      setCurrentUser(UserCredential.user);
-    } catch (error) {
-      setError(true);
-      alert("メールアドレスまたはパスワードが間違っています");
-    }
+    setError(true);
   };
 
   return (
@@ -58,7 +46,6 @@ export default function SignIn() {
                   id="email"
                   type="email"
                   className="block h-10 w-full pl-10 pr-2 rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset text-md"
-                  onChange={(e) => setEmail(e.target.value)}
                 />
                 <span className="absolute left-2 bottom-2 flex items-center">
                   <EmailIcon className="text-gray-400" />
