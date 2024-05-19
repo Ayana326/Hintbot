@@ -1,15 +1,22 @@
 import { getCurrentUser } from "@/firebase/auth";
 import { User } from "firebase/auth";
-import { createContext, useEffect, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 type AuthContextProps = {
   currentUser: User | null | undefined;
-  setCurrentUser: ((user: User | null) => void) | undefined;
+  setCurrentUser: Dispatch<SetStateAction<User | null | undefined>>;
 };
 
 const AuthContext = createContext<AuthContextProps>({
   currentUser: undefined,
-  setCurrentUser: undefined,
+  setCurrentUser: () => {},
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -32,3 +39,5 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     </AuthContext.Provider>
   );
 };
+
+export const useAuthContext = () => useContext(AuthContext);
