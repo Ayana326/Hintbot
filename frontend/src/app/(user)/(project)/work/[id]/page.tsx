@@ -41,7 +41,6 @@ export default function QuizPage({ params }: { params: { id: string } }) {
   }, [id]);
 
   useEffect(() => {
-    console.log("タイムスタンプを時間に変換します");
     const currentTime = new Date(calcTime);
     const h = String(currentTime.getHours() - 9).padStart(2, "0");
     const m = String(currentTime.getMinutes()).padStart(2, "0");
@@ -50,8 +49,7 @@ export default function QuizPage({ params }: { params: { id: string } }) {
     //　ミリ秒表示
     // setDisplayTime(`${h}:${m}:${s}:${ms}`);
     setDisplayTime(`${h}:${m}:${s}`);
-    console.log(displayTime);
-  }, [calcTime]);
+  }, [calcTime, setDisplayTime]);
 
   const handleDrawerClose = () => {
     setOpen(false);
@@ -75,7 +73,11 @@ export default function QuizPage({ params }: { params: { id: string } }) {
       <div>{displayTime}</div>
       <div className="h-50 m-10">
         <div
-          style={{ margin: "0px 100px", marginRight: open ? "400px" : "100px" }}
+          style={{
+            margin: "0px 50px",
+            marginRight: open ? "400px" : "50px",
+            minWidth: "500px",
+          }}
         >
           <div className="mb-3">
             <div className="flex justify-between">

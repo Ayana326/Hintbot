@@ -21,10 +21,11 @@ export const MessageBubble = ({ message, position }: Props) => {
         <Chip
           sx={{
             padding: "5px 0",
-            maxWidth: "50%",
+            maxWidth: "70%",
             height: "auto",
             "& .MuiChip-label": {
               whiteSpace: "pre-wrap",
+              overflowWrap: "break-word",
             },
             textAlign: "left",
           }}
