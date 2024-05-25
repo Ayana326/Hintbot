@@ -14,8 +14,8 @@ export const ChatBot = () => {
   }, [messages]);
 
   return (
-    <div className="w-full">
-      <div className="border rounded-md relative" style={{ height: "80vh" }}>
+    <div className="w-full h-full">
+      <div className="border rounded-md relative h-full">
         <div
           ref={scrollRef}
           className="body p-6 overflow-scroll"

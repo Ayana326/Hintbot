@@ -14,19 +14,13 @@
     --background-start-rgb: 0, 0, 0;
     --background-end-rgb: 0, 0, 0;
   }
-}
+} */
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background-color: #f5f5f5;
 }
 
-@layer utilities {
+/* @layer utilities {
   .text-balance {
     text-wrap: balance;
   }

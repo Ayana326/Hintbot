@@ -9,10 +9,11 @@ export default function GlobalHeader({
     <AppBar
       elevation={0}
       color="default"
-      position="static"
+      position="sticky"
       sx={{
+        zIndex: (theme) => theme.zIndex.drawer + 1,
         height: `50px`,
-        backgroundColor: "white",
+        backgroundColor: "#000033",
         borderBottom: "1px solid lightgrey",
         width: "100%",
       }}

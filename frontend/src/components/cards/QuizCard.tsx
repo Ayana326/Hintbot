@@ -16,7 +16,7 @@ export const QuizCard = ({ width, quiz }: Props) => {
   const router = useRouter();
   return (
     <div className="w-full">
-      <Card variant="outlined" sx={{ width: `100%`, padding: "0px" }}>
+      <Card sx={{ width: `100%`, padding: "0px" }}>
         <CardHeader
           sx={{ paddingBottom: "0px" }}
           titleTypographyProps={{ fontSize: "16px" }}
