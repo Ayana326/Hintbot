@@ -13,6 +13,16 @@ export const ChatBot = () => {
     }
   }, [messages]);
 
+  useEffect(() => {
+    const serializedMessage = localStorage.getItem("messages");
+    if (serializedMessage) {
+      const array = JSON.parse(serializedMessage);
+      setMessages(array);
+    } else {
+      setMessages([]);
+    }
+  }, []);
+
   return (
     <div className="w-full h-full">
       <div className="border rounded-md relative h-full">

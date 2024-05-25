@@ -10,14 +10,48 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { Drawer, IconButton, Tooltip } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useSearchParams } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-export default function QuizPage() {
+export default function QuizPage({ params }: { params: { id: string } }) {
   const searchParams = useSearchParams();
   const title = searchParams.get("title");
   const content = searchParams.get("content");
-  const theme = useTheme();
   const [open, setOpen] = useState<boolean>(true);
+  const [displayTime, setDisplayTime] = useState("00:00:00");
+  const [calcTime, setcalcTime] = useState(0);
+  const theme = useTheme();
+  const id = params.id;
+
+  useEffect(() => {
+    const localStrageID = localStorage.getItem("id");
+    if (localStrageID != id) {
+      localStorage.removeItem("messages");
+      localStorage.setItem("id", id);
+      localStorage.setItem("start_time", Date.now().toString());
+    }
+    if (localStorage.getItem("start_time") == null) {
+      localStorage.setItem("start_time", Date.now().toString());
+    }
+    const start = localStorage.getItem("start_time");
+    if (start) {
+      const timerInterval = window.setInterval(() => {
+        setcalcTime(Date.now() - Number(start));
+      }, 1000);
+    }
+  }, [id]);
+
+  useEffect(() => {
+    console.log("タイムスタンプを時間に変換します");
+    const currentTime = new Date(calcTime);
+    const h = String(currentTime.getHours() - 9).padStart(2, "0");
+    const m = String(currentTime.getMinutes()).padStart(2, "0");
+    const s = String(currentTime.getSeconds()).padStart(2, "0");
+    const ms = String(currentTime.getMilliseconds()).padStart(3, "0");
+    //　ミリ秒表示
+    // setDisplayTime(`${h}:${m}:${s}:${ms}`);
+    setDisplayTime(`${h}:${m}:${s}`);
+    console.log(displayTime);
+  }, [calcTime]);
 
   const handleDrawerClose = () => {
     setOpen(false);
@@ -26,8 +60,6 @@ export default function QuizPage() {
   const handleDrawerOpen = () => {
     setOpen(true);
   };
-
-  console.log(content);
 
   const DrawerHeader = styled("div")(({ theme }) => ({
     display: "flex",
@@ -40,6 +72,7 @@ export default function QuizPage() {
 
   return (
     <React.Fragment>
+      <div>{displayTime}</div>
       <div className="h-50 m-10">
         <div
           style={{ margin: "0px 100px", marginRight: open ? "400px" : "100px" }}
@@ -55,7 +88,7 @@ export default function QuizPage() {
               ) : (
                 <Tooltip title="Chat for Hint">
                   <IconButton onClick={handleDrawerOpen}>
-                    <RobotTalkIcon />
+                    <RobotTalkIcon size={45} />
                   </IconButton>
                 </Tooltip>
               )}

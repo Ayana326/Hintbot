@@ -17,7 +17,7 @@ export const IDE = () => {
   };
   return (
     <div className="flex items-start flex-col">
-      <div className="w-full p-2  border">
+      <div className="w-full p-2  border bg-white">
         <div className="">
           <label htmlFor="comment" className="sr-only">
             Add your code

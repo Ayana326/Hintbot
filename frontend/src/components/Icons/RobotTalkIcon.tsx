@@ -1,16 +1,20 @@
 import ChatIcon from "@mui/icons-material/Chat";
 import SmartToyIcon from "@mui/icons-material/SmartToy";
 
-export const RobotTalkIcon = () => {
+type Props = {
+  size?: number;
+};
+
+export const RobotTalkIcon = ({ size = 45 }: Props) => {
   return (
     <div style={{ position: "relative" }}>
-      <SmartToyIcon sx={{ fontSize: 45 }} />
+      <SmartToyIcon sx={{ fontSize: size }} />
       <ChatIcon
         sx={{
-          fontSize: 30,
+          fontSize: (size * 2) / 3,
           position: "absolute",
-          bottom: "25px",
-          left: "40px",
+          bottom: `calc(${size}px - 20px)`,
+          left: `calc(${size})px`,
         }}
       />
     </div>

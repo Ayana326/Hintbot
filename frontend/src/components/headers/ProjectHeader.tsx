@@ -11,6 +11,9 @@ export const ProjectHeader = () => {
   const SignOut = () => {
     signout().then(() => {
       document.cookie = "token=; Max-Age=0; Secure;";
+      localStorage.removeItem("id");
+      localStorage.removeItem("messages");
+      localStorage.removeItem("start_time");
       setCurrentUser(undefined);
       router.push("/");
     });
