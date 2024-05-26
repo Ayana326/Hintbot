@@ -19,10 +19,30 @@ export const PublicHeader = () => {
           <ListItemButton
             sx={{ height: "100%" }}
             onClick={() => {
-              router.push("/work");
+              router.push("/");
             }}
           >
-            <span className="mx-auto text-sm">Top</span>
+            <span className="mx-auto text-sm text-white">Top</span>
+          </ListItemButton>
+        </ListItem>
+        <ListItem sx={{ width: "100px", padding: "0px" }}>
+          <ListItemButton
+            sx={{ height: "100%" }}
+            onClick={() => {
+              router.push("/signin");
+            }}
+          >
+            <span className="mx-auto text-sm text-white">ログイン</span>
+          </ListItemButton>
+        </ListItem>
+        <ListItem sx={{ width: "100px", padding: "0px" }}>
+          <ListItemButton
+            sx={{ height: "100%" }}
+            onClick={() => {
+              router.push("/signup");
+            }}
+          >
+            <span className="mx-auto text-sm text-white">新規登録</span>
           </ListItemButton>
         </ListItem>
       </List>

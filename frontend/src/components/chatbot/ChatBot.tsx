@@ -13,9 +13,19 @@ export const ChatBot = () => {
     }
   }, [messages]);
 
+  useEffect(() => {
+    const serializedMessage = localStorage.getItem("messages");
+    if (serializedMessage) {
+      const array = JSON.parse(serializedMessage);
+      setMessages(array);
+    } else {
+      setMessages([]);
+    }
+  }, []);
+
   return (
-    <div className="w-full">
-      <div className="border rounded-md relative" style={{ height: "80vh" }}>
+    <div className="w-full h-full">
+      <div className="border rounded-md relative h-full">
         <div
           ref={scrollRef}
           className="body p-6 overflow-scroll"

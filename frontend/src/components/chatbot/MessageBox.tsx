@@ -37,7 +37,7 @@ export const MessageBox = ({ messages, setMessages }: Props) => {
     setMessages((prevMessages) => [...prevMessages, newMessage]);
     setUserMessage("");
 
-    // 5秒待機
+    // 2秒待機
     await sleep(2000);
 
     // 新しいメッセージオブジェクトのコピーを作成してaiプロパティを更新
@@ -47,8 +47,12 @@ export const MessageBox = ({ messages, setMessages }: Props) => {
     setMessages((prevMessages) => {
       const updatedMessages = [...prevMessages];
       updatedMessages[updatedMessages.length - 1] = updatedMessage;
+      const serializedArray = JSON.stringify(updatedMessages);
+      localStorage.setItem("messages", serializedArray);
       return updatedMessages;
     });
+
+    console.log(localStorage.getItem("messages"));
     setWait((prevState) => !prevState);
   };
 

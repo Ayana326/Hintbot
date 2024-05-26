@@ -1,3 +1,4 @@
+import { useAuthContext } from "@/context/AuthContext";
 import { signout } from "@/firebase/auth";
 import { Button, List, ListItem, ListItemButton } from "@mui/material";
 import { useRouter } from "next/navigation";
@@ -5,10 +6,15 @@ import GlobalHeader from "../header/GlobalHeader";
 
 export const ProjectHeader = () => {
   const router = useRouter();
+  const { setCurrentUser } = useAuthContext();
 
   const SignOut = () => {
     signout().then(() => {
       document.cookie = "token=; Max-Age=0; Secure;";
+      localStorage.removeItem("id");
+      localStorage.removeItem("messages");
+      localStorage.removeItem("start_time");
+      setCurrentUser(undefined);
       router.push("/");
     });
   };
@@ -30,7 +36,7 @@ export const ProjectHeader = () => {
                 router.push("/");
               }}
             >
-              <span className="mx-auto text-sm">Top</span>
+              <span className="mx-auto text-sm text-white">Top</span>
             </ListItemButton>
           </ListItem>
           <ListItem sx={{ width: "100px", padding: "0px" }}>
@@ -40,7 +46,7 @@ export const ProjectHeader = () => {
                 router.push("/work");
               }}
             >
-              <span className="mx-auto text-sm">問題一覧</span>
+              <span className="mx-auto text-sm text-white">問題一覧</span>
             </ListItemButton>
           </ListItem>
         </List>
@@ -49,7 +55,7 @@ export const ProjectHeader = () => {
             onClick={() => {
               SignOut();
             }}
-            color="secondary"
+            sx={{ color: "white" }}
           >
             サインアウト
           </Button>
