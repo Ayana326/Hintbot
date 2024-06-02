@@ -1,7 +1,16 @@
-export const ReturnBox = () => {
+import { FC, ReactNode } from "react";
+
+export const ReturnBox: FC<{
+  children?: ReactNode
+}> = ({
+  children
+}) => {
   return (
-    <div>
-      <div className="w-full border">result</div>
+    <div className="w-full border">
+      <div>result</div>
+      <div>
+        {children}
+      </div>
     </div>
   );
 };

@@ -21,10 +21,12 @@
     "firebase-admin": "^12.0.0",
     "next": "14.2.3",
     "node-gyp": "^10.1.0",
+    "pyodide": "^0.23.4",
     "react": "^18",
     "react-dom": "^18",
     "react-monaco-editor": "^0.55.0",
-    "styled-components": "^6.1.11"
+    "styled-components": "^6.1.11",
+    "webpack": "^5.91.0"
   },
   "devDependencies": {
     "@types/node": "^20",
