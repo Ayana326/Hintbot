@@ -4,10 +4,11 @@ import { RobotTalkIcon } from "@/components/Icons/RobotTalkIcon";
 import { ChatBot } from "@/components/chatbot/ChatBot";
 import { IDE } from "@/components/editor/CodeEditor";
 import { ReturnBox } from "@/components/editor/ReturnBox";
+import { PythonExecuter } from "@/executers/python";
 import { useTheme } from "@emotion/react";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import { Drawer, IconButton, Tooltip } from "@mui/material";
+import { Alert, Drawer, IconButton, TextareaAutosize, Tooltip } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -19,8 +20,27 @@ export default function QuizPage({ params }: { params: { id: string } }) {
   const [open, setOpen] = useState<boolean>(true);
   const [displayTime, setDisplayTime] = useState("00:00:00");
   const [calcTime, setcalcTime] = useState(0);
+  
+  //const [code,setCode] = useState<string>("");
   const theme = useTheme();
   const id = params.id;
+
+  const [pythonExecuter, setPythonExecuter] = useState<PythonExecuter|undefined>(undefined);
+  const [execResult, setExecResult] = useState<string>("");
+  const [error, setError] = useState<string|null>(null);
+
+  //pythonを実行するもののセットアップ
+  useEffect(()=>{
+    let _pythonExecuter = new PythonExecuter(
+      (msg)=>{setExecResult((prev)=>prev.length>0?prev+"\n"+msg:msg)},
+      setError,
+    );
+    _pythonExecuter.init().then(()=>{
+      setPythonExecuter(_pythonExecuter)
+    }).catch((err)=>{
+      setError(`${err}`)
+    })
+  }, [])
 
   useEffect(() => {
     const localStrageID = localStorage.getItem("id");
@@ -68,6 +88,23 @@ export default function QuizPage({ params }: { params: { id: string } }) {
     ...theme.mixins.toolbar,
   }));
 
+  const onCodeExec = async (code:string) => {
+    try{
+      if(!pythonExecuter){
+        setError("python executer is not ready yet.")
+        return
+      }else{
+        setExecResult("");
+        setError(null);
+        await pythonExecuter.exec(code);
+      }
+    }catch(e){
+      setError(`${e}`)
+    }
+    
+
+  }
+
   return (
     <React.Fragment>
       <div>{displayTime}</div>
@@ -97,10 +134,28 @@ export default function QuizPage({ params }: { params: { id: string } }) {
             </div>
           </div>
           <div>
-            <IDE />
+            <IDE 
+              onSubmit={onCodeExec}
+            ></IDE>
           </div>
           <div className="mt-5">
-            <ReturnBox />
+            <ReturnBox>
+              <div>
+              {
+              error&&<Alert severity="error">{error}</Alert>
+              }
+              {
+                execResult&&
+                <TextareaAutosize 
+                  className="w-full bg-white" 
+                  minRows={3}
+                  maxRows={20}
+                  value={execResult} 
+                  disabled
+                />
+              }
+              </div>
+            </ReturnBox>
           </div>
         </div>
 
