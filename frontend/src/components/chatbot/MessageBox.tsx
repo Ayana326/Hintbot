@@ -1,6 +1,8 @@
+import { Body } from "@/app/api/hintbot/ask/route";
 import { ArrowCircleRight } from "@mui/icons-material";
-import { IconButton, InputAdornment, TextField, styled } from "@mui/material";
+import { Alert, IconButton, InputAdornment, TextField, styled } from "@mui/material";
 import { Dispatch, SetStateAction, useState } from "react";
+import {parseCookies} from "nookies";
 
 const CssTextField = styled(TextField)({
   ".mui-1q37jh5-MuiInputBase-root-MuiOutlinedInput-root": {
@@ -26,8 +28,34 @@ type Props = {
 export const MessageBox = ({ messages, setMessages }: Props) => {
   const [userMessage, setUserMessage] = useState<string>("");
   const [wait, setWait] = useState<boolean>(false);
-  const sleep = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms));
+  const [error, setError] = useState<string>("");
+  //const sleep = (ms: number) =>
+  //  new Promise((resolve) => setTimeout(resolve, ms));
+  
+  const fetchAnswer: (question:string)=>Promise<string> = async (question:string) => {
+    const {token} = parseCookies();
+    if (!token) throw Error("token required. do login first.");
+    const body:Body = {
+      hint_type: "with-code",
+      question: question,
+    }
+    const response = await fetch("http://localhost:3000/api/hintbot/ask", {
+      method: "POST",
+      headers: {
+        cookie: `token=${token}; Secure;`,
+      },
+      body: JSON.stringify(body)
+    });
+    const resBody = await response.json();
+    if(!response.ok){
+      throw Error(`[${response.status}] ${response.statusText}: ${resBody}`);
+    }
+    const {answer} = resBody;
+    if(!answer){
+      throw Error("answer not found in response")
+    }
+    return `${answer}`;
+  }
 
   const onButtonClick = async () => {
     setWait((prevState) => !prevState);
@@ -38,10 +66,20 @@ export const MessageBox = ({ messages, setMessages }: Props) => {
     setUserMessage("");
 
     // 2秒待機
-    await sleep(2000);
+    //await sleep(2000);
+    let answer = "";
+    try{
+      answer = await fetchAnswer(newMessage.user)
+      console.debug("answer: ",answer);
+      setError("");
+    }catch(e){
+      console.error(e);
+      setError(`${e}`)
+      return;
+    }
 
     // 新しいメッセージオブジェクトのコピーを作成してaiプロパティを更新
-    let updatedMessage = { ...newMessage, ai: "レスポンス" };
+    let updatedMessage = { ...newMessage, ai: answer };
 
     // メッセージ配列の最後のメッセージを更新
     setMessages((prevMessages) => {
@@ -80,6 +118,9 @@ export const MessageBox = ({ messages, setMessages }: Props) => {
           setUserMessage(e.target.value);
         }}
       />
+      {
+        error!==""&&<Alert severity="error">{error}</Alert>
+      }
     </div>
   );
 };
