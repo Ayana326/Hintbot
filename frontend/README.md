@@ -1,5 +1,41 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+# 準備
+1. Firebaseの準備
+    - Firebaseプロジェクトを作成しアプリを登録。そこで認証及びWebアプリを追加する。
+        - [参考](https://firebase.google.com/docs/web/setup?hl=ja&authuser=0) 
+    - Firebaseプロジェクトの設定 > サービスアカウント > 秘密鍵の作成 を行う
+2. 1.及び[.devcontainer.env.template](./.devcontainer/.env.template)を参考に[.devcontainer/.env](./.devcontainer/.env)ファイルを作成する。
+3. 実行(以下のいずれか)
+    - DevContainerで動かす
+    - 環境変数[.devcontainer/.env](./.devcontainer/.env)をセットしたのち、[Getting Started](#getting-started)を参考に動かす
+    ```環境変数をセット.sh
+    #!/bin/bash
+
+    # .envファイルのパスを指定
+    ENV_FILE="./.devcontainer/.env"
+
+    # .envファイルが存在するか確認
+    if [ -f "$ENV_FILE" ]; then
+        # .envファイルを読み込み、各行をエクスポート
+        while IFS= read -r line || [ -n "$line" ]; do
+            # コメント行や空行を無視
+            if [[ $line == \#* ]] || [[ -z $line ]]; then
+                continue
+            fi
+            
+            # 変数名と値に分割
+            IFS='=' read -r key value <<< "$line"
+            
+            # 変数をエクスポート
+            export "$key=$value"
+        done < "$ENV_FILE"
+    else
+        echo "$ENV_FILE ファイルが見つかりません"
+    fi
+    ```
+    
+
 ## Getting Started
 
 First, run the development server:
