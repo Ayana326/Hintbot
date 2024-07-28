@@ -1,8 +1,14 @@
 import { Body } from "@/app/api/hintbot/ask/route";
 import { ArrowCircleRight } from "@mui/icons-material";
-import { Alert, IconButton, InputAdornment, TextField, styled } from "@mui/material";
+import {
+  Alert,
+  IconButton,
+  InputAdornment,
+  TextField,
+  styled,
+} from "@mui/material";
 import { Dispatch, SetStateAction, useState } from "react";
-import {parseCookies} from "nookies";
+import { parseCookies } from "nookies";
 
 const CssTextField = styled(TextField)({
   ".mui-1q37jh5-MuiInputBase-root-MuiOutlinedInput-root": {
@@ -31,31 +37,34 @@ export const MessageBox = ({ messages, setMessages }: Props) => {
   const [error, setError] = useState<string>("");
   //const sleep = (ms: number) =>
   //  new Promise((resolve) => setTimeout(resolve, ms));
-  
-  const fetchAnswer: (question:string)=>Promise<string> = async (question:string) => {
-    const {token} = parseCookies();
+
+  const fetchAnswer: (question: string) => Promise<string> = async (
+    question: string,
+  ) => {
+    const { token } = parseCookies();
     if (!token) throw Error("token required. do login first.");
-    const body:Body = {
+    const body: Body = {
       hint_type: "with-code",
       question: question,
-    }
-    const response = await fetch("http://localhost:3000/api/hintbot/ask", {
+    };
+    const host = process.env.HOST ?? "http://localhost:3000";
+    const response = await fetch(`${host}/api/hintbot/ask`, {
       method: "POST",
       headers: {
         cookie: `token=${token}; Secure;`,
       },
-      body: JSON.stringify(body)
+      body: JSON.stringify(body),
     });
     const resBody = await response.json();
-    if(!response.ok){
+    if (!response.ok) {
       throw Error(`[${response.status}] ${response.statusText}: ${resBody}`);
     }
-    const {answer} = resBody;
-    if(!answer){
-      throw Error("answer not found in response")
+    const { answer } = resBody;
+    if (!answer) {
+      throw Error("answer not found in response");
     }
     return `${answer}`;
-  }
+  };
 
   const onButtonClick = async () => {
     setWait((prevState) => !prevState);
@@ -68,13 +77,13 @@ export const MessageBox = ({ messages, setMessages }: Props) => {
     // 2秒待機
     //await sleep(2000);
     let answer = "";
-    try{
-      answer = await fetchAnswer(newMessage.user)
-      console.debug("answer: ",answer);
+    try {
+      answer = await fetchAnswer(newMessage.user);
+      console.debug("answer: ", answer);
       setError("");
-    }catch(e){
+    } catch (e) {
       console.error(e);
-      setError(`${e}`)
+      setError(`${e}`);
       return;
     }
 
@@ -118,9 +127,7 @@ export const MessageBox = ({ messages, setMessages }: Props) => {
           setUserMessage(e.target.value);
         }}
       />
-      {
-        error!==""&&<Alert severity="error">{error}</Alert>
-      }
+      {error !== "" && <Alert severity="error">{error}</Alert>}
     </div>
   );
 };

@@ -13,11 +13,9 @@ if __name__ == "__main__":
 `;
 
 export const IDE: FC<{
-  onSubmit?: (code:string)=>void
-  onChanged?: (code:string)=>void
-}> = ({
-  onSubmit=()=>{},onChanged=()=>{},
-}) => {
+  onSubmit?: (code: string) => void;
+  onChanged?: (code: string) => void;
+}> = ({ onSubmit = () => {}, onChanged = () => {} }) => {
   const [code, setCode] = useState<string>(DefaultCode);
   return (
     <div className="flex items-start flex-col">
@@ -30,9 +28,9 @@ export const IDE: FC<{
             height="40vh"
             defaultLanguage="python"
             defaultValue={code}
-            onChange={(v)=>{
-              setCode(v??"");
-              onChanged(v??"");
+            onChange={(v) => {
+              setCode(v ?? "");
+              onChanged(v ?? "");
             }}
           />
         </div>
@@ -40,7 +38,9 @@ export const IDE: FC<{
           <div className="flex items-center space-x-5"></div>
           <div className="flex-shrink-0">
             <Button
-              onClick={()=>{onSubmit(code)}}
+              onClick={() => {
+                onSubmit(code);
+              }}
               variant="outlined"
               color="error"
             >

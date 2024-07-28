@@ -4,8 +4,11 @@ import admin from "@/firebase/firebase_admin";
 import { NextRequest, NextResponse } from "next/server";
 import { validateToken } from "../../verifyToken/route";
 import { ChatOpenAI } from "@langchain/openai";
-import { HumanMessage,AIMessage,SystemMessage } from "@langchain/core/messages";
-
+import {
+  HumanMessage,
+  AIMessage,
+  SystemMessage,
+} from "@langchain/core/messages";
 
 const hintInstructions = {
   "without-code": `
@@ -64,51 +67,48 @@ A:私は、質問者がわかりやすく、かつ答えを教えないように
 `,
 };
 
-
-const chatModelName:string = "gpt-3.5-turbo";
+const chatModelName: string = "gpt-3.5-turbo";
 
 export type Body = {
-  hint_type: "with-code"|"without-code",
-  question: string,
-}
+  hint_type: "with-code" | "without-code";
+  question: string;
+};
 
 export async function POST(request: NextRequest) {
-    
+  const user = await validateToken(request);
+  if (user === null) {
+    return NextResponse.json({ error: "Not Authorized" }, { status: 401 });
+  }
 
-    const user = await validateToken(request);
-    if (user === null) {
-        return     NextResponse.json({ error: "Not Authorized" }, { status: 401 });
-    } 
-    
-    try{
-        const {question,hint_type} :Partial<Body> = await request.json();
-        if(!question || !hint_type){
-            return NextResponse.json({ error: "Bad Request" }, { status: 400 });
-        }
-        let templateMessage:string = hintInstructions[hint_type];
-        let model:ChatOpenAI = new ChatOpenAI({model: chatModelName});
-        let answer = await model.invoke([
-            new SystemMessage({content: templateMessage}),
-            new HumanMessage({ content: question })
-        ]);
-        return NextResponse.json({ answer: answer.content.toString() }, {status: 200})
-    }catch(e){
-        console.error(e);
-        return NextResponse.json({ error: "Bad Request" }, { status: 400 });
+  try {
+    const { question, hint_type }: Partial<Body> = await request.json();
+    if (!question || !hint_type) {
+      return NextResponse.json({ error: "Bad Request" }, { status: 400 });
     }
-    
-    
+    let templateMessage: string = hintInstructions[hint_type];
+    let model: ChatOpenAI = new ChatOpenAI({ model: chatModelName });
+    let answer = await model.invoke([
+      new SystemMessage({ content: templateMessage }),
+      new HumanMessage({ content: question }),
+    ]);
+    return NextResponse.json(
+      { answer: answer.content.toString() },
+      { status: 200 },
+    );
+  } catch (e) {
+    console.error(e);
+    return NextResponse.json({ error: "Bad Request" }, { status: 400 });
+  }
 }
 
 export const string2UniqueNumber = (input: string) => {
-    // シンプルなハッシュ関数を作成
-    let hash = 0;
-    for (let i = 0; i < input.length; i++) {
-        const char = input.charCodeAt(i);
-        hash = ((hash << 5) - hash) + char;
-        hash |= 0; // Convert to 32bit integer
-    }
-    // ハッシュ値をポジティブな数に変換
-    return Math.abs(hash);
-}
-
+  // シンプルなハッシュ関数を作成
+  let hash = 0;
+  for (let i = 0; i < input.length; i++) {
+    const char = input.charCodeAt(i);
+    hash = (hash << 5) - hash + char;
+    hash |= 0; // Convert to 32bit integer
+  }
+  // ハッシュ値をポジティブな数に変換
+  return Math.abs(hash);
+};
