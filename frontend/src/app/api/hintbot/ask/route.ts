@@ -9,10 +9,11 @@ import {
   AIMessage,
   SystemMessage,
 } from "@langchain/core/messages";
-import { ConstructHintInstructionForSpecificProblem, HintInstructionTypes, HintInstructions } from "../../../../types/hintBot";
-
-
-
+import {
+  ConstructHintInstructionForSpecificProblem,
+  HintInstructionTypes,
+  HintInstructions,
+} from "../../../../types/hintBot";
 
 export type AskHintBotRequestBody = {
   hint_type: HintInstructionTypes;
@@ -28,19 +29,31 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const { problem, question, hint_type, message_history }: Partial<AskHintBotRequestBody> = await request.json();
+    const {
+      problem,
+      question,
+      hint_type,
+      message_history,
+    }: Partial<AskHintBotRequestBody> = await request.json();
     if (!problem || !question || !hint_type) {
       return NextResponse.json({ error: "Bad Request" }, { status: 400 });
     }
-    let templateMessage: string = ConstructHintInstructionForSpecificProblem(problem, hint_type);
+    let templateMessage: string = ConstructHintInstructionForSpecificProblem(
+      problem,
+      hint_type,
+    );
     const chatModelName = process.env.OPENAI_CHAT_MODEL_NAME;
     if (!chatModelName) {
-      throw new Error("env value OPENAI_CHAT_MODEL_NAME not defined in this server")
+      throw new Error(
+        "env value OPENAI_CHAT_MODEL_NAME not defined in this server",
+      );
     }
     let model: ChatOpenAI = new ChatOpenAI({ model: chatModelName });
     let answer = await model.invoke([
       new SystemMessage({ content: templateMessage }),
-      new AIMessage({ content: `会話履歴は以下の通りです: \n${message_history}` }),
+      new AIMessage({
+        content: `会話履歴は以下の通りです: \n${message_history}`,
+      }),
       new HumanMessage({ content: question }),
     ]);
     return NextResponse.json(

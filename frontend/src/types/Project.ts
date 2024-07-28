@@ -1,9 +1,9 @@
 import { HintInstructionTypes } from "./hintBot";
 
 export type MessageTypeAI = {
-  hint_type: HintInstructionTypes,
-  hint: string,
-}
+  hint_type: HintInstructionTypes;
+  hint: string;
+};
 export type MessageType = {
   user: string;
   ai: MessageTypeAI[];

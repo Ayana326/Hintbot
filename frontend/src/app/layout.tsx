@@ -23,7 +23,7 @@ export default function RootLayout({
             AppRouterCacheProvider,
             AuthProvider,
             [ThemeProvider, { theme: theme }],
-            ChatBotSettingContextProvider
+            ChatBotSettingContextProvider,
           ]}
         >
           {children}

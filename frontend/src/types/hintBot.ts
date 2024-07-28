@@ -144,15 +144,18 @@ export enum HintInstructions {
   A:すみません、できません。
   Q:あなたはどのような基準に沿って答えていますか？
   A:私は、質問者がわかりやすく、かつ答えを教えないようにヒントを出すように努力しています。
-  `
+  `,
 }
 
 export type HintInstructionTypes = keyof typeof HintInstructions;
 
-export function ConstructHintInstructionForSpecificProblem(problem: string, hint_type: HintInstructionTypes): string {
+export function ConstructHintInstructionForSpecificProblem(
+  problem: string,
+  hint_type: HintInstructionTypes,
+): string {
   return `${HintInstructions[hint_type]}
 
 ###問題###
 ${problem}
-`
+`;
 }

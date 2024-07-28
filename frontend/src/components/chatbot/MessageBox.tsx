@@ -79,7 +79,7 @@ export const MessageBox = ({ problem, messages, setMessages }: Props) => {
       res.push({
         hint_type: hint_type,
         hint: `${answer}`,
-      })
+      });
     }
     return res;
   };
@@ -96,14 +96,21 @@ export const MessageBox = ({ problem, messages, setMessages }: Props) => {
     try {
       //const hintInstructionTypesArray = Object.keys(HintInstructions) as HintInstructionTypes[];
       const messageHistoryMaxLimit = 1;
-      const messagesUsedForHistory = messages.slice().reverse().slice(0, Math.min(messages.length, messageHistoryMaxLimit));
-      const messageHistory = messagesUsedForHistory.map((m) => {
-        const aiHints = m.ai.map((aim) => {
-          return `- (hint_type: ${aim.hint_type}) ${aim.hint}\n`;
-        }).join("");
+      const messagesUsedForHistory = messages
+        .slice()
+        .reverse()
+        .slice(0, Math.min(messages.length, messageHistoryMaxLimit));
+      const messageHistory = messagesUsedForHistory
+        .map((m) => {
+          const aiHints = m.ai
+            .map((aim) => {
+              return `- (hint_type: ${aim.hint_type}) ${aim.hint}\n`;
+            })
+            .join("");
 
-        return `人間からの質問:\n- ${m.user}\nAIからのヒント:\n${aiHints}`;
-      }).join("\n");
+          return `人間からの質問:\n- ${m.user}\nAIからのヒント:\n${aiHints}`;
+        })
+        .join("\n");
 
       answer = await fetchAnswer(
         problem,

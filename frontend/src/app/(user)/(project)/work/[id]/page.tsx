@@ -180,7 +180,7 @@ export default function QuizPage({ params }: { params: { id: string } }) {
           open={open}
         >
           <div className="mt-12">
-            <DrawerHeader >
+            <DrawerHeader>
               <div className="w-full px-2 flex items-center justify-between">
                 <div className="flex items-center">
                   <IconButton onClick={handleDrawerClose}>
@@ -189,7 +189,9 @@ export default function QuizPage({ params }: { params: { id: string } }) {
                   <span>ヒントボット</span>
                 </div>
                 <IconButton
-                  onClick={() => { setIsSettingOpen(prev => !prev); }}
+                  onClick={() => {
+                    setIsSettingOpen((prev) => !prev);
+                  }}
                   color="default"
                 >
                   <Settings />
