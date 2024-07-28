@@ -1,3 +1,4 @@
+import { QuizType } from "@/types/Project";
 import {
   Button,
   Card,

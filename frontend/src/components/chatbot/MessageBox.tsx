@@ -1,4 +1,5 @@
-import { Body } from "@/app/api/hintbot/ask/route";
+import { AskHintBotRequestBody } from "@/app/api/hintbot/ask/route";
+import { HintInstructionTypes, HintInstructions } from "@/types/hintBot";
 import { ArrowCircleRight } from "@mui/icons-material";
 import {
   Alert,
@@ -9,6 +10,8 @@ import {
 } from "@mui/material";
 import { Dispatch, SetStateAction, useState } from "react";
 import { parseCookies } from "nookies";
+import { MessageType, MessageTypeAI } from "@/types/Project";
+import { useChatBotSettingContext } from "./Setting";
 
 const CssTextField = styled(TextField)({
   ".mui-1q37jh5-MuiInputBase-root-MuiOutlinedInput-root": {
@@ -27,58 +30,87 @@ const CssTextField = styled(TextField)({
 });
 
 type Props = {
+  problem: string;
   messages: MessageType[];
   setMessages: Dispatch<SetStateAction<MessageType[]>>;
 };
 
-export const MessageBox = ({ messages, setMessages }: Props) => {
+export const MessageBox = ({ problem, messages, setMessages }: Props) => {
+  const { enabledHintInstructionTypes } = useChatBotSettingContext();
   const [userMessage, setUserMessage] = useState<string>("");
   const [wait, setWait] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   //const sleep = (ms: number) =>
   //  new Promise((resolve) => setTimeout(resolve, ms));
 
-  const fetchAnswer: (question: string) => Promise<string> = async (
+  const fetchAnswer = async (
+    problem: string,
     question: string,
+    hint_types: HintInstructionTypes[],
+    message_history: string,
   ) => {
     const { token } = parseCookies();
     if (!token) throw Error("token required. do login first.");
-    const body: Body = {
-      hint_type: "with-code",
-      question: question,
-    };
-    const host = process.env.HOST ?? "http://localhost:3000";
-    const response = await fetch(`${host}/api/hintbot/ask`, {
-      method: "POST",
-      headers: {
-        cookie: `token=${token}; Secure;`,
-      },
-      body: JSON.stringify(body),
-    });
-    const resBody = await response.json();
-    if (!response.ok) {
-      throw Error(`[${response.status}] ${response.statusText}: ${resBody}`);
+
+    let res: MessageTypeAI[] = [];
+    for (let hint_type of hint_types) {
+      const body: AskHintBotRequestBody = {
+        hint_type: hint_type,
+        question: question,
+        problem: problem,
+        message_history: message_history,
+      };
+      const host = process.env.HOST ?? "http://localhost:3000";
+      const response = await fetch(`${host}/api/hintbot/ask`, {
+        method: "POST",
+        headers: {
+          cookie: `token=${token}; Secure;`,
+        },
+        body: JSON.stringify(body),
+      });
+      const resBody = await response.json();
+      if (!response.ok) {
+        throw Error(`[${response.status}] ${response.statusText}: ${resBody}`);
+      }
+      const { answer } = resBody;
+      if (!answer) {
+        throw Error("answer not found in response");
+      }
+      res.push({
+        hint_type: hint_type,
+        hint: `${answer}`,
+      })
     }
-    const { answer } = resBody;
-    if (!answer) {
-      throw Error("answer not found in response");
-    }
-    return `${answer}`;
+    return res;
   };
 
   const onButtonClick = async () => {
     setWait((prevState) => !prevState);
-    let newMessage = { user: userMessage, ai: "" };
+    let newMessage: MessageType = { user: userMessage, ai: [] };
 
     // メッセージ配列に新しいメッセージを追加
     setMessages((prevMessages) => [...prevMessages, newMessage]);
     setUserMessage("");
 
-    // 2秒待機
-    //await sleep(2000);
-    let answer = "";
+    let answer: MessageTypeAI[] = [];
     try {
-      answer = await fetchAnswer(newMessage.user);
+      //const hintInstructionTypesArray = Object.keys(HintInstructions) as HintInstructionTypes[];
+      const messageHistoryMaxLimit = 1;
+      const messagesUsedForHistory = messages.slice().reverse().slice(0, Math.min(messages.length, messageHistoryMaxLimit));
+      const messageHistory = messagesUsedForHistory.map((m) => {
+        const aiHints = m.ai.map((aim) => {
+          return `- (hint_type: ${aim.hint_type}) ${aim.hint}\n`;
+        }).join("");
+
+        return `人間からの質問:\n- ${m.user}\nAIからのヒント:\n${aiHints}`;
+      }).join("\n");
+
+      answer = await fetchAnswer(
+        problem,
+        newMessage.user,
+        enabledHintInstructionTypes,
+        messageHistory,
+      );
       console.debug("answer: ", answer);
       setError("");
     } catch (e) {
