@@ -11,6 +11,7 @@ const quiz_title: { [key: string]: string } = {
   conditional_branch: "条件分岐",
   loop: "ループ処理",
   comprehensive: "総合問題",
+  dynamic_planning: "動的計画法",
 };
 
 export default function WorkPage() {
