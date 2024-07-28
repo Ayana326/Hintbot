@@ -5,7 +5,7 @@ WORKDIR /app
 COPY package.json /app
 COPY package-lock.json /app
 
-RUN npm ci && npm cache clean --force
+RUN npm ci --force --legacy-peer-deps && npm cache clean --force
 
 ADD . /app
 

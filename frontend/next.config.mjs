@@ -1,4 +1,4 @@
-import webpack from 'webpack';
+import webpack from "webpack";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -11,7 +11,7 @@ const nextConfig = {
         resource.request = resource.request.replace(/^node:/, "");
       })
     );
-    
+
     //次のエラーを無視: Critical dependency: the request of a dependency is an expression
     webpackConfig.module = {
       ...webpackConfig.module,
