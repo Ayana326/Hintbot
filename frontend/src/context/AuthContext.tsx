@@ -21,7 +21,7 @@ const AuthContext = createContext<AuthContextProps>({
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [currentUser, setCurrentUser] = useState<User | null | undefined>(
-    undefined
+    undefined,
   );
   useEffect(() => {
     getCurrentUser(async (user: User | null) => {

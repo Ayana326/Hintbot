@@ -5,7 +5,8 @@ const verify = async (request: NextRequest) => {
   // const admin = getAuth(firebaseAdminApp);
   const token = request.cookies.get("token")?.value;
   if (!token) return false;
-  const response = await fetch("http://localhost:3000/api/verifyToken", {
+  const host = process.env.HOST ?? "http://localhost:3000";
+  const response = await fetch(`${host}/api/verifyToken`, {
     method: "GET",
     headers: {
       cookie: `token=${token}; Secure;`,
