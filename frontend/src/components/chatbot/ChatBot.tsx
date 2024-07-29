@@ -1,9 +1,15 @@
-import { useEffect, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
+import { HintInstructions } from "@/types/hintBot";
 import { MessageBox } from "./MessageBox";
-import { MessageBubble } from "./MessageBubble";
+import { MessageBubble, MultipleMessageBubble } from "./MessageBubble";
+import { MessageType } from "@/types/Project";
 
-export const ChatBot = () => {
+export const ChatBot: FC<{
+  problem: string;
+}> = ({ problem }) => {
   const [messages, setMessages] = useState<MessageType[]>([]);
+  const messagesLocalStorageKey = "messages";
+
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -14,10 +20,32 @@ export const ChatBot = () => {
   }, [messages]);
 
   useEffect(() => {
-    const serializedMessage = localStorage.getItem("messages");
+    const serializedMessage = localStorage.getItem(messagesLocalStorageKey);
     if (serializedMessage) {
-      const array = JSON.parse(serializedMessage);
-      setMessages(array);
+      try {
+        const messagesStored = JSON.parse(serializedMessage) as MessageType[];
+        setMessages(messagesStored);
+        //保存されたデータの検証(本当はいい感じのライブラリを使って検証したい)
+        for (let messageStored of messagesStored) {
+          if (typeof messageStored.user !== "string")
+            throw new Error("type mismatch");
+          for (let messageStoredAImessage of messageStored.ai) {
+            if (
+              typeof messageStoredAImessage.hint !== "string" ||
+              !Object.keys(HintInstructions).includes(
+                messageStoredAImessage.hint_type,
+              )
+            )
+              throw new Error("type mismatch");
+          }
+        }
+      } catch (e) {
+        //localStorageのデータを削除
+        console.error(e);
+        localStorage.removeItem(messagesLocalStorageKey);
+        setMessages([]);
+        console.log("old messages stored locally was deleted.");
+      }
     } else {
       setMessages([]);
     }
@@ -35,13 +63,23 @@ export const ChatBot = () => {
             return (
               <div key={index}>
                 <MessageBubble message={message.user} position="right" />
-                <MessageBubble message={message.ai} position="left" />
+                <MultipleMessageBubble
+                  messages={message.ai.map(
+                    (d) =>
+                      `hint-type: ${Object.keys(HintInstructions).indexOf(d.hint_type) + 1}\n\n${d.hint}`,
+                  )}
+                  position="left"
+                />
               </div>
             );
           })}
         </div>
         <div className="text-sending absolute bottom-1 right-0 left-0 m-auto w-11/12">
-          <MessageBox messages={messages} setMessages={setMessages} />
+          <MessageBox
+            problem={problem}
+            messages={messages}
+            setMessages={setMessages}
+          />
         </div>
       </div>
     </div>

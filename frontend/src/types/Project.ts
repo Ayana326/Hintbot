@@ -1,9 +1,15 @@
-type MessageType = {
+import { HintInstructionTypes } from "./hintBot";
+
+export type MessageTypeAI = {
+  hint_type: HintInstructionTypes;
+  hint: string;
+};
+export type MessageType = {
   user: string;
-  ai: string;
+  ai: MessageTypeAI[];
 };
 
-type QuizType = {
+export type QuizType = {
   id: string;
   type: string;
   title: string;

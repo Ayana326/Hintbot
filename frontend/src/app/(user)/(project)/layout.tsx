@@ -1,5 +1,7 @@
 "use client";
+import { ChatBotSettingContextProvider } from "@/components/chatbot/Setting";
 import { ProjectHeader } from "@/components/headers/ProjectHeader";
+import { Compose } from "@/components/providers/compose";
 
 export default function ProjectLayout({
   children,

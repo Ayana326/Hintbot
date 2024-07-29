@@ -2,10 +2,12 @@
 
 import { RobotTalkIcon } from "@/components/Icons/RobotTalkIcon";
 import { ChatBot } from "@/components/chatbot/ChatBot";
+import { ChatBotSettingComponent } from "@/components/chatbot/Setting";
 import { IDE } from "@/components/editor/CodeEditor";
 import { ReturnBox } from "@/components/editor/ReturnBox";
 import { PythonExecuter } from "@/executers/python";
 import { useTheme } from "@emotion/react";
+import { Settings } from "@mui/icons-material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import {
@@ -26,6 +28,8 @@ export default function QuizPage({ params }: { params: { id: string } }) {
   const [open, setOpen] = useState<boolean>(true);
   const [displayTime, setDisplayTime] = useState("00:00:00");
   const [calcTime, setcalcTime] = useState(0);
+
+  const [isSettingOpen, setIsSettingOpen] = useState<boolean>(false);
 
   //const [code,setCode] = useState<string>("");
   const theme = useTheme();
@@ -177,12 +181,25 @@ export default function QuizPage({ params }: { params: { id: string } }) {
         >
           <div className="mt-12">
             <DrawerHeader>
-              <IconButton onClick={handleDrawerClose}>
-                {open ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-              </IconButton>
-              ヒントボット
+              <div className="w-full px-2 flex items-center justify-between">
+                <div className="flex items-center">
+                  <IconButton onClick={handleDrawerClose}>
+                    {open ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+                  </IconButton>
+                  <span>ヒントボット</span>
+                </div>
+                <IconButton
+                  onClick={() => {
+                    setIsSettingOpen((prev) => !prev);
+                  }}
+                  color="default"
+                >
+                  <Settings />
+                </IconButton>
+              </div>
             </DrawerHeader>
-            <ChatBot />
+            {isSettingOpen && <ChatBotSettingComponent />}
+            <ChatBot problem={`${title}\n${content}`} />
           </div>
         </Drawer>
       </div>

@@ -3,6 +3,7 @@ import { QuizCard } from "@/components/cards/QuizCard";
 import { Grid } from "@mui/material";
 import { useEffect, useState } from "react";
 import { quizzes } from "../../../../../data/quiz_index";
+import { QuizType } from "@/types/Project";
 
 const quiz_title: { [key: string]: string } = {
   print: "出力",
