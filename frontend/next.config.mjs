@@ -1,3 +1,4 @@
+import { PyodidePlugin } from "@pyodide/webpack-plugin";
 import webpack from "webpack";
 
 /** @type {import('next').NextConfig} */
@@ -9,7 +10,8 @@ const nextConfig = {
       // ref: https://github.com/vercel/next.js/issues/28774
       new webpack.NormalModuleReplacementPlugin(/^node:/, (resource) => {
         resource.request = resource.request.replace(/^node:/, "");
-      })
+      }),
+      new PyodidePlugin()
     );
 
     //次のエラーを無視: Critical dependency: the request of a dependency is an expression
