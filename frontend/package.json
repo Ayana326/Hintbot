@@ -28,7 +28,7 @@
     "node-gyp": "^10.1.0",
     "nookies": "^2.5.2",
     "patch-package": "^8.0.0",
-    "pyodide": "^0.26.2",
+    "pyodide": "^0.24.1",
     "react": "^18",
     "react-dom": "^18",
     "react-monaco-editor": "^0.55.0",

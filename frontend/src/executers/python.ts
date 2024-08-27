@@ -35,7 +35,7 @@ export class PythonExecuter {
   async init() {
     if (!this._pyodide) {
       this._pyodide = await loadPyodide({
-        indexURL: "https://cdn.jsdelivr.net/pyodide/v0.26.2/full/",
+        indexURL: "https://cdn.jsdelivr.net/pyodide/v0.24.1/full/",
         stdout: this._stdin,
         stderr: this._stdout,
       });
