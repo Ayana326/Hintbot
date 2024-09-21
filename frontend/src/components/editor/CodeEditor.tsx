@@ -1,22 +1,13 @@
 import { Editor } from "@monaco-editor/react";
 import { Button } from "@mui/material";
-import { FC, MouseEventHandler, useState } from "react";
-
-const DefaultCode: string = `import sys
-
-def main(args):
-  print(args)
-
-if __name__ == "__main__":
-  args = sys.argv
-  main(args[1])
-`;
+import { Dispatch, FC, SetStateAction } from "react";
 
 export const IDE: FC<{
   onSubmit?: (code: string) => void;
   onChanged?: (code: string) => void;
-}> = ({ onSubmit = () => {}, onChanged = () => {} }) => {
-  const [code, setCode] = useState<string>(DefaultCode);
+  code: string;
+  setCode: Dispatch<SetStateAction<string>>;
+}> = ({ onSubmit = () => {}, onChanged = () => {}, code, setCode }) => {
   return (
     <div className="flex items-start flex-col">
       <div className="w-full p-2  border bg-white">

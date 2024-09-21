@@ -1,19 +1,17 @@
 "use server";
 
-import admin from "@/firebase/firebase_admin";
-import { NextRequest, NextResponse } from "next/server";
-import { validateToken } from "../../verifyToken/route";
-import { ChatOpenAI } from "@langchain/openai";
 import {
-  HumanMessage,
   AIMessage,
+  HumanMessage,
   SystemMessage,
 } from "@langchain/core/messages";
+import { ChatOpenAI } from "@langchain/openai";
+import { NextRequest, NextResponse } from "next/server";
 import {
   ConstructHintInstructionForSpecificProblem,
-  HintInstructionTypes,
-  HintInstructions,
+  HintInstructionTypes
 } from "../../../../types/hintBot";
+import { validateToken } from "../../verifyToken/route";
 
 export type AskHintBotRequestBody = {
   hint_type: HintInstructionTypes;
