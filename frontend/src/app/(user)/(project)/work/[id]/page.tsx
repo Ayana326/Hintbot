@@ -5,6 +5,7 @@ import { ChatBot } from "@/components/chatbot/ChatBot";
 import { ChatBotSettingComponent } from "@/components/chatbot/Setting";
 import { IDE } from "@/components/editor/CodeEditor";
 import { ReturnBox } from "@/components/editor/ReturnBox";
+import RatingDialog from "@/components/rating/RatingComponent";
 import { PythonExecuter } from "@/executers/python";
 import { useTheme } from "@emotion/react";
 import { Settings } from "@mui/icons-material";
@@ -60,7 +61,7 @@ if __name__ == "__main__":
   >(undefined);
   const [execResult, setExecResult] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
-  // const [doCheck, setDoCheck] = useState<boolean>(false);
+  const [isCorrect, setIsCorrect] = useState<boolean | undefined>(undefined);
   const doCheck = useRef(false) 
   //pythonを実行するもののセットアップ
   useEffect(() => {
@@ -73,10 +74,13 @@ if __name__ == "__main__":
         if(doCheck.current){
           console.log(doCheck.current);
           if(targetQuiz.answer && targetQuiz.answer===msg){
+            setIsCorrect(true)
             console.log("correct")
           }else{
+            setIsCorrect(false);
             console.log("wrong answer")
           }
+          doCheck.current = false
         }
       },
       setError
@@ -155,7 +159,7 @@ if __name__ == "__main__":
 
   const onSubmit = () => {
     doCheck.current = true
-    onCodeExec(code, )
+    onCodeExec(code)
     
   }
 
@@ -188,15 +192,7 @@ if __name__ == "__main__":
             </div>
           </div>
           <div>
-            <div className="text-right mb-3">
-              <Button
-                variant="outlined"
-                onClick={() => onSubmit()}
-              >
-                提出
-              </Button>
-            </div>
-            <IDE onSubmit={onCodeExec} code={code} setCode={setCode} ></IDE>
+            <IDE onSubmit={onCodeExec} code={code} setCode={setCode}></IDE>
           </div>
           <div className="mt-5">
             <ReturnBox>
@@ -214,6 +210,22 @@ if __name__ == "__main__":
               </div>
             </ReturnBox>
           </div>
+          <div className="text-right mb-3">
+            <Button variant="outlined" onClick={() => onSubmit()}>
+              提出
+            </Button>
+          </div>
+
+          {isCorrect !== undefined &&
+            (isCorrect ? (
+              <Alert className="w-full" severity={"success"}>
+                正解です！
+              </Alert>
+            ) : (
+              <Alert className="w-full" severity="error">
+                間違っています
+              </Alert>
+            ))}
         </div>
 
         <Drawer
@@ -252,6 +264,8 @@ if __name__ == "__main__":
             <ChatBot problem={`${title}\n${content}`} />
           </div>
         </Drawer>
+        
+        {isCorrect && <RatingDialog/>}
       </div>
     </React.Fragment>
   );
