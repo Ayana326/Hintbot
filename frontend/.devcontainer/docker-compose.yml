@@ -10,7 +10,9 @@ services:
       dockerfile: ./.devcontainer/Dockerfile
     volumes:
       - ../:/app
+      - node-modules:/app/node_modules
     ports:
       - "3000:3000"
     env_file:
       - .env
+
