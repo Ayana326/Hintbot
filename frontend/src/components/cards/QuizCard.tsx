@@ -32,7 +32,7 @@ export const QuizCard = ({ width, quiz }: Props) => {
             color="primary"
             onClick={() => {
               router.push(
-                `/work/${quiz.id}?title=${encodeURIComponent(quiz.title)}&content=${encodeURIComponent(quiz.content)}`,
+                `/work/${quiz.id}`,
               );
             }}
           >

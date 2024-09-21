@@ -15,4 +15,6 @@ export type QuizType = {
   title: string;
   abstract: string;
   content: string;
+  stdin?: string;
+  answer?: string;
 };

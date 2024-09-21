@@ -1,5 +1,6 @@
-export const quizzes = [
-  ,
+import { QuizType } from "@/types/Project";
+
+export const quizzes: QuizType[] = [
   {
     id: "0000001",
     type: "print",
@@ -85,5 +86,23 @@ export const quizzes = [
 3の倍数かつ5の倍数のときは「FizzBuzz」を出力
 それ以外の場合は数字そのものを出力
     `,
+  },
+  {
+    id: "00000012",
+    type: "comprehensive",
+    title: "Frog1",
+    abstract: "アルゴリズム",
+    stdin: "4\n10 30 40 20",
+    content: `
+    N 個の足場があります。足場には 1,2,…,N と番号が振られています。
+    各i(1≤i≤N)について、足場iの高さはh_iです。
+    最初、足場1にカエルがいます。カエルは次の行動を何回か繰り返し、足場Nまで辿り着こうとしています。
+    ・足場iにいるとき、足場i+1またはi+2へジャンプする。このとき、ジャンプ先の足場をjとすると、コスト|h_i-h_j|を支払う。
+    カエルが足場Nに辿り着くまでに支払うコストの総和の最小値を求めてください。\n
+    入力は以下の形式で標準入力から与えられる
+    N\n
+    h_1, h_2, ... , h_N
+    `,
+    answer: "30"
   },
 ];

@@ -12,22 +12,42 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import {
   Alert,
+  Button,
   Drawer,
   IconButton,
   TextareaAutosize,
-  Tooltip,
+  Tooltip
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { quizzes } from "../../../../../../data/quiz_index";
+
+
+
 
 export default function QuizPage({ params }: { params: { id: string } }) {
+
+  const DefaultCode: string = `import sys
+
+def main(input):
+  print(input)
+
+if __name__ == "__main__":
+  input:str = sys.stdin.read().strip()
+  main(input)
+`;
+
+
+  const targetQuiz = quizzes.filter((quiz) => quiz.id === params.id)[0]
+
   const searchParams = useSearchParams();
-  const title = searchParams.get("title");
-  const content = searchParams.get("content");
+  const title = targetQuiz.title;
+  const content = targetQuiz.content;
   const [open, setOpen] = useState<boolean>(true);
   const [displayTime, setDisplayTime] = useState("00:00:00");
   const [calcTime, setcalcTime] = useState(0);
+  const [code, setCode] = useState<string>(DefaultCode);
 
   const [isSettingOpen, setIsSettingOpen] = useState<boolean>(false);
 
@@ -40,12 +60,27 @@ export default function QuizPage({ params }: { params: { id: string } }) {
   >(undefined);
   const [execResult, setExecResult] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
-
+  // const [doCheck, setDoCheck] = useState<boolean>(false);
+  const doCheck = useRef(false) 
   //pythonを実行するもののセットアップ
   useEffect(() => {
-    let _pythonExecuter = new PythonExecuter((msg) => {
-      setExecResult((prev) => (prev.length > 0 ? prev + "\n" + msg : msg));
-    }, setError);
+
+    let _pythonExecuter = new PythonExecuter(
+      targetQuiz.stdin ?? "",
+      (msg) => {
+        setExecResult((prev) => (prev.length > 0 ? prev + "\n" + msg : msg));
+        console.log(doCheck.current)
+        if(doCheck.current){
+          console.log(doCheck.current);
+          if(targetQuiz.answer && targetQuiz.answer===msg){
+            console.log("correct")
+          }else{
+            console.log("wrong answer")
+          }
+        }
+      },
+      setError
+    );
     _pythonExecuter
       .init()
       .then(() => {
@@ -117,6 +152,13 @@ export default function QuizPage({ params }: { params: { id: string } }) {
     }
   };
 
+
+  const onSubmit = () => {
+    doCheck.current = true
+    onCodeExec(code, )
+    
+  }
+
   return (
     <React.Fragment>
       <div>{displayTime}</div>
@@ -146,7 +188,15 @@ export default function QuizPage({ params }: { params: { id: string } }) {
             </div>
           </div>
           <div>
-            <IDE onSubmit={onCodeExec}></IDE>
+            <div className="text-right mb-3">
+              <Button
+                variant="outlined"
+                onClick={() => onSubmit()}
+              >
+                提出
+              </Button>
+            </div>
+            <IDE onSubmit={onCodeExec} code={code} setCode={setCode} ></IDE>
           </div>
           <div className="mt-5">
             <ReturnBox>

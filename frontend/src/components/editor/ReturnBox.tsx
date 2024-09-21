@@ -5,7 +5,7 @@ export const ReturnBox: FC<{
 }> = ({ children }) => {
   return (
     <div className="w-full border">
-      <div>result</div>
+      <div>実行結果</div>
       <div>{children}</div>
     </div>
   );

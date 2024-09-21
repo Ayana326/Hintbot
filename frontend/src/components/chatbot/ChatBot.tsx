@@ -1,8 +1,8 @@
-import { FC, useEffect, useRef, useState } from "react";
 import { HintInstructions } from "@/types/hintBot";
+import { MessageType } from "@/types/Project";
+import { FC, useEffect, useRef, useState } from "react";
 import { MessageBox } from "./MessageBox";
 import { MessageBubble, MultipleMessageBubble } from "./MessageBubble";
-import { MessageType } from "@/types/Project";
 
 export const ChatBot: FC<{
   problem: string;
@@ -57,7 +57,7 @@ export const ChatBot: FC<{
         <div
           ref={scrollRef}
           className="body p-6 overflow-scroll"
-          style={{ height: "calc(80vh - 64px)" }}
+          style={{ height: "calc(100vh - 176px)" }}
         >
           {messages.map((message: MessageType, index: number) => {
             return (
@@ -66,7 +66,7 @@ export const ChatBot: FC<{
                 <MultipleMessageBubble
                   messages={message.ai.map(
                     (d) =>
-                      `hint-type: ${Object.keys(HintInstructions).indexOf(d.hint_type) + 1}\n\n${d.hint}`,
+                      `hint-type: ${Object.keys(HintInstructions).indexOf(d.hint_type) + 1}\n\n${d.hint}`
                   )}
                   position="left"
                 />
@@ -74,13 +74,13 @@ export const ChatBot: FC<{
             );
           })}
         </div>
-        <div className="text-sending absolute bottom-1 right-0 left-0 m-auto w-11/12">
-          <MessageBox
-            problem={problem}
-            messages={messages}
-            setMessages={setMessages}
-          />
-        </div>
+      </div>
+      <div className="text-sending absolute bottom-1 right-0 left-0 m-auto w-11/12">
+        <MessageBox
+          problem={problem}
+          messages={messages}
+          setMessages={setMessages}
+        />
       </div>
     </div>
   );
