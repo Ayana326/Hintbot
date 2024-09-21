@@ -40,17 +40,15 @@ if __name__ == "__main__":
 `;
 
 
-  const targetQuiz = quizzes.filter((quiz) => quiz.id === params.id)[0]
 
   const searchParams = useSearchParams();
-  const title = targetQuiz.title;
-  const content = targetQuiz.content;
   const [open, setOpen] = useState<boolean>(true);
   const [displayTime, setDisplayTime] = useState("00:00:00");
   const [calcTime, setcalcTime] = useState(0);
   const [code, setCode] = useState<string>(DefaultCode);
-
   const [isSettingOpen, setIsSettingOpen] = useState<boolean>(false);
+  const [title, setTitle] = useState<string>("")
+  const [content, setContent] = useState<string>("");
 
   //const [code,setCode] = useState<string>("");
   const theme = useTheme();
@@ -65,6 +63,10 @@ if __name__ == "__main__":
   const doCheck = useRef(false) 
   //pythonを実行するもののセットアップ
   useEffect(() => {
+
+    const targetQuiz = quizzes.filter((quiz) => quiz.id === params.id)[0];
+    setTitle(targetQuiz.title)
+    setContent(targetQuiz.content)
 
     let _pythonExecuter = new PythonExecuter(
       targetQuiz.stdin ?? "",
