@@ -1,0 +1,21 @@
+diff --git a/node_modules/@pyodide/webpack-plugin/plugin.mjs b/node_modules/@pyodide/webpack-plugin/plugin.mjs
+index 1aac011..855c45e 100644
+--- a/node_modules/@pyodide/webpack-plugin/plugin.mjs
++++ b/node_modules/@pyodide/webpack-plugin/plugin.mjs
+@@ -1,6 +1,6 @@
+ import * as __WEBPACK_EXTERNAL_MODULE_copy_webpack_plugin_c1a9f86d__ from "copy-webpack-plugin";
+-import * as __WEBPACK_EXTERNAL_MODULE_webpack__ from "webpack";
+ import { createRequire as __WEBPACK_EXTERNAL_createRequire } from "module";
++import * as __WEBPACK_EXTERNAL_MODULE_webpack__ from "webpack";
+ /******/ var __webpack_modules__ = ({
+ 
+ /***/ "./lib/patterns.ts":
+@@ -311,7 +311,7 @@ class PyodidePlugin extends copy_webpack_plugin__WEBPACK_IMPORTED_MODULE_4__["de
+     apply(compiler) {
+         super.apply(compiler);
+         compiler.hooks.compilation.tap(this.constructor.name, (compilation) => {
+-            const compilationHooks = webpack__WEBPACK_IMPORTED_MODULE_5__["default"].NormalModule.getCompilationHooks(compilation);
++            const compilationHooks =compiler.webpack.NormalModule.getCompilationHooks(compilation); 
+             compilationHooks.beforeLoaders.tap(this.constructor.name, (loaders, normalModule) => {
+                 const matches = normalModule.userRequest.match(/pyodide\.m?js$/);
+                 if (matches) {
