@@ -21,7 +21,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useSearchParams } from "next/navigation";
-import React, { useEffect, useRef, useState } from "react";
+import React, { ReactNode, useEffect, useRef, useState } from "react";
 import { quizzes } from "../../../../../../data/quiz_index";
 
 
@@ -35,7 +35,7 @@ def main(input):
   print(input)
 
 if __name__ == "__main__":
-  input:str = sys.stdin.read().strip()
+  input:str = sys.stdin.readline().strip()
   main(input)
 `;
 
@@ -48,7 +48,7 @@ if __name__ == "__main__":
   const [code, setCode] = useState<string>(DefaultCode);
   const [isSettingOpen, setIsSettingOpen] = useState<boolean>(false);
   const [title, setTitle] = useState<string>("")
-  const [content, setContent] = useState<string>("");
+  const [content, setContent] = useState<string | ReactNode>("");
 
   //const [code,setCode] = useState<string>("");
   const theme = useTheme();
@@ -180,7 +180,9 @@ if __name__ == "__main__":
             <div className="flex justify-between">
               <div>
                 <h1 className="text-2xl font-bold">{title}</h1>
-                <div className="whitespace-pre-wrap mt-2">{content}</div>
+                <div className="whitespace-pre-wrap mt-2">
+                  {content}
+                </div>
               </div>
               {open ? (
                 <></>

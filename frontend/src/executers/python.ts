@@ -59,9 +59,16 @@ export class PythonExecuter {
 
   exec(code: string): void {
     if (this._pyodide) {
-      this.stdinLineIndex = 0
-      this._pyodide.runPython(code);
-      return;
+      try{
+        this.stdinLineIndex = 0
+        console.log(code);
+        this._pyodide.runPython(code);
+        console.log("AAA")
+        return;
+      }catch (e) {
+        console.log(e)
+        return;
+      }
     } else {
       throw Error("Pyodide not found. Please run `init()` first.");
     }
