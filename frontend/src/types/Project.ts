@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { HintInstructionTypes } from "./hintBot";
 
 export type MessageTypeAI = {
@@ -14,7 +15,7 @@ export type QuizType = {
   type: string;
   title: string;
   abstract: string;
-  content: string;
+  content: string | ReactNode;
   stdin?: string;
   answer?: string;
 };

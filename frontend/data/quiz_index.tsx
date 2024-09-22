@@ -1,4 +1,6 @@
 import { QuizType } from "@/types/Project";
+import "katex/dist/katex.min.css";
+import { InlineMath } from "react-katex";
 
 export const quizzes: QuizType[] = [
   {
@@ -93,16 +95,40 @@ export const quizzes: QuizType[] = [
     title: "Frog1",
     abstract: "アルゴリズム",
     stdin: "4\n10 30 40 20",
-    content: `
-    N 個の足場があります。足場には 1,2,…,N と番号が振られています。
-    各i(1≤i≤N)について、足場iの高さはh_iです。
-    最初、足場1にカエルがいます。カエルは次の行動を何回か繰り返し、足場Nまで辿り着こうとしています。
-    ・足場iにいるとき、足場i+1またはi+2へジャンプする。このとき、ジャンプ先の足場をjとすると、コスト|h_i-h_j|を支払う。
-    カエルが足場Nに辿り着くまでに支払うコストの総和の最小値を求めてください。\n
-    入力は以下の形式で標準入力から与えられる
-    N\n
-    h_1, h_2, ... , h_N
-    `,
-    answer: "30"
+    content: (
+      <div>
+        <h1 className="text-lg font-bold">問題文</h1>
+        <InlineMath>N</InlineMath>個の足場があります。足場には
+        <InlineMath>1,2,…,N</InlineMath>と番号が振られています。 各
+        <InlineMath>i(1≤i≤N)</InlineMath>について、足場
+        <InlineMath>i</InlineMath>の高さは<InlineMath>h_i</InlineMath>です。
+        最初、足場<InlineMath>1</InlineMath>
+        にカエルがいます。カエルは次の行動を何回か繰り返し、足場
+        <InlineMath>N</InlineMath>まで辿り着こうとしています。 ・足場
+        <InlineMath>i</InlineMath>にいるとき、足場<InlineMath>i+1</InlineMath>
+        または<InlineMath>i+2</InlineMath>
+        へジャンプする。このとき、ジャンプ先の足場を<InlineMath>j</InlineMath>
+        とすると、コスト<InlineMath>|h_i-h_j|</InlineMath>を支払う。
+        カエルが足場に辿り着くまでに支払うコストの総和の最小値を求めてください。
+        <br />
+        <br />
+        入力は以下の形式で標準入力から与えられる。
+        <div>
+          <InlineMath>N</InlineMath>
+          <br />
+          <InlineMath>h_1, h_2, ... , h_N</InlineMath>
+        </div>
+      </div>
+    ),
+    answer: "30",
   },
 ];
+
+    // N 個の足場があります。足場には 1,2,…,N と番号が振られています。
+    // 各i(1≤i≤N)について、足場iの高さはh_iです。
+    // 最初、足場1にカエルがいます。カエルは次の行動を何回か繰り返し、足場Nまで辿り着こうとしています。
+    // ・足場iにいるとき、足場i+1またはi+2へジャンプする。このとき、ジャンプ先の足場をjとすると、コスト|h_i-h_j|を支払う。
+    // カエルが足場Nに辿り着くまでに支払うコストの総和の最小値を求めてください。\n
+    // 入力は以下の形式で標準入力から与えられる
+    // N\n
+    // h_1, h_2, ... , h_N

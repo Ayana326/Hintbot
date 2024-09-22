@@ -47,7 +47,7 @@ export class PythonExecuter {
   async init() {
     if (!this._pyodide) {
       this._pyodide = await loadPyodide({
-        indexURL: "https://cdn.jsdelivr.net/pyodide/v0.24.1/full/",
+        indexURL: "https://cdn.jsdelivr.net/pyodide/v0.26.2/full/",
         stdin: this.stdinCallback,
         stdout: this._stdin,
         stderr: this._stdout,
@@ -59,9 +59,16 @@ export class PythonExecuter {
 
   exec(code: string): void {
     if (this._pyodide) {
-      this.stdinLineIndex = 0
-      this._pyodide.runPython(code);
-      return;
+      try{
+        this.stdinLineIndex = 0
+        console.log(code);
+        this._pyodide.runPython(code);
+        console.log("AAA")
+        return;
+      }catch (e) {
+        console.log(e)
+        return;
+      }
     } else {
       throw Error("Pyodide not found. Please run `init()` first.");
     }
